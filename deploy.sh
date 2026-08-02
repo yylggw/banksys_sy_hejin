@@ -28,8 +28,11 @@ fi
 echo ">> 部署到主机端口 $PORT"
 
 # 在服务器上构建 Docker 镜像（源码已通过 SCP 传输）
-echo ">> 构建 Docker 镜像..."
-docker build -t "$IMAGE" /opt/banksys_sy_hejin
+echo ">> 构建 Docker 镜像（使用国内镜像源加速）..."
+docker build \
+  --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple \
+  -t "$IMAGE" \
+  /opt/banksys_sy_hejin
 
 # 停删旧容器（幂等）
 docker rm -f "$APP" 2>/dev/null || true

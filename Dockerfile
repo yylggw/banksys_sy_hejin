@@ -6,14 +6,14 @@ ARG PIP_INDEX_URL=https://pypi.org/simple
 
 WORKDIR /app
 
-# 安装系统依赖（matplotlib/seaborn 需要）
+# 安装系统依赖（curl for healthcheck）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# 安装 Python 生产依赖
+# 安装 Python 生产依赖（使用镜像源加速，默认 Tsinghua 镜像在国内服务器更快）
 COPY requirements.txt .
-RUN pip install --no-cache-dir --timeout 120 -i "${PIP_INDEX_URL}" -r requirements.txt
+RUN pip install --no-cache-dir --timeout 300 -i "${PIP_INDEX_URL}" -r requirements.txt
 
 # 复制应用代码
 COPY app/ app/
