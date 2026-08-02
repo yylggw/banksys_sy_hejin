@@ -1,0 +1,9 @@
+[run]
+source = app/utils
+
+[report]
+exclude_lines =
+    if __name__ == "__main__":
+    pragma: no cover
+    def log_message
+fail_under = 80
