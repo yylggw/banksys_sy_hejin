@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.git/
+.gitignore
+data/
+models/*.pkl
+models/*.joblib
+README.md
+requirements-dev.txt
+tests/
+.venv/
+venv/
+.env
+.profile
+.dockerignore
+.github/

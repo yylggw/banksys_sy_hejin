@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Format check (ruff format)
+        run: ruff format --check .
+
+      - name: Static check (ruff check)
+        run: ruff check .
+
+      - name: Unit tests with coverage
+        run: pytest --cov-config=.coveragerc --cov=app/utils --cov-fail-under=80 --cov-report=term-missing -v
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: banksys_sy_hejin:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker image
+        run: |
+          docker run -d --name banksys_sy_hejin_test -p 8889:8889 banksys_sy_hejin:ci
+          sleep 5
+          docker ps | grep banksys_sy_hejin_test
+          curl -fsS http://localhost:8889/health || echo "Health check failed"
+          docker rm -f banksys_sy_hejin_test

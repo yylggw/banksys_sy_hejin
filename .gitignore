@@ -27,6 +27,11 @@ models/*.joblib
 models/*.onnx
 !models/.gitkeep
 
+# Test / coverage
+.coverage*
+.pytest_cache/
+__pycache__/
+
 # Docker
 .docker/
 
