@@ -23,7 +23,6 @@ jobs:
           ruff check .
           pytest --cov-config=.coveragerc --cov=app/utils --cov-fail-under=80 -v
 
-      # 只复制源码到服务器（不含 Docker 镜像包，Docker 镜像直接在服务器构建）
       - name: Copy source code to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -34,12 +33,13 @@ jobs:
           target: "/opt/banksys_sy_hejin/"
           strip_components: 0
 
-      - name: Deploy via SSH
+      - name: Deploy via SSH (build + run, timeout 20m)
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 20m
           script: |
             set -e
             cd /opt/banksys_sy_hejin
