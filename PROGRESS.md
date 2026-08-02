@@ -8,34 +8,35 @@
 
 ## 当前状态
 
-- **六步流程位置**:尚未开始(第①步准备中)
-- **当前会话目标**:填写 `00/01/PROGRESS` 并获人类确认后,正式进入第①步建仓
-- **阻塞项**:先等人类确认这份计划
+- **六步流程位置**:第③步 — 本地模块化开发中
+- **当前会话**:已完成模块1（基础工程结构），即将开始模块2（数据分析页面）
+- **阻塞项**:无
 
 ---
 
-## 第一批 TODO
+## 已完成的 TODO
 
-### 第①步:建仓 + 配 Secrets (待确认后执行)
+### ✅ 第①步:建仓 + 配 Secrets
 
-- [ ] 创建本地 Git 仓库(`git init`)
-- [ ] 编写 `.gitignore`(排除 data/、models/、__pycache__、.env 等)
-- [ ] 编写 `README.md`(项目简介、技术栈、启动方式、端口说明)
-- [ ] 编写 `requirements.txt`(生产依赖:streamlit、scikit-learn、pandas、matplotlib、seaborn、joblib)
-- [ ] 编写 `requirements-dev.txt`(开发依赖 + lint:ruff、pytest、pytest-cov)
-- [ ] 编写 `Dockerfile`(基于 python:3.11-slim,安装依赖,暴露 8888,设置 healthcheck)
-- [ ] 编写 `.dockerignore`
-- [ ] 编写 `app/__init__.py` + `app/main.py`(Streamlit 入口,含 `/health` 端点)
-- [ ] 编写 `app/utils/__init__.py` + `app/utils/data_loader.py` + `app/utils/model_utils.py`
-- [ ] 编写 `tests/` 基础测试
-- [ ] 编写 `.github/workflows/ci.yml`
-- [ ] 编写 `.github/workflows/cd.yml`(占位,待服务器信息确认后填充)
-- [ ] 首次 `git commit` + 创建 GitHub 仓库 + push
-- [ ] ✋ **确认门 1**:提示人类配置 GitHub Secrets(SSH_PRIVATE_KEY/SSH_HOST/SSH_USER)
+- [x] 创建本地 Git 仓库(`git init`)
+- [x] 编写 `.gitignore`(排除 data/、models/、__pycache__、.env 等)
+- [x] 编写 `README.md`(项目简介、技术栈、启动方式、端口说明)
+- [x] 编写 `requirements.txt`(生产依赖:streamlit、scikit-learn、pandas、matplotlib、seaborn、joblib)
+- [x] 编写 `requirements-dev.txt`(开发依赖 + lint:ruff、pytest、pytest-cov)
+- [x] 编写 `Dockerfile`(基于 python:3.11-slim,安装依赖,暴露 8888,设置 healthcheck)
+- [x] 编写 `.dockerignore`
+- [x] 编写 `app/__init__.py` + `app/main.py`(Streamlit 入口,含 health 端点)
+- [x] 编写 `app/utils/__init__.py`
+- [x] 编写 `tests/` 基础测试(test_app.py)
+- [x] 编写 `.github/workflows/ci.yml`
+- [x] 编写 `.github/workflows/cd.yml`
+- [x] 编写 `deploy.sh`(部署脚本,端口回退 8888-8898)
+- [x] 首次 `git commit` + 创建 GitHub 仓库 `yylggw/banksys_sy_hejin` + push
+- [x] ✋ 确认门 1:提示人类配置 GitHub Secrets ✅ (已配好 SSH_PRIVATE_KEY/SSH_HOST/SSH_USER)
 
-### 第②步:开 feature 分支
+### ✅ 第②步:开 feature 分支
 
-- [ ] 从 main 切 `feature/1-hello-app` 分支
+- [x] 从 main 切 `feature/1-project-setup` 分支
 
 ### 第③步:本地模块化开发 (按模块分期)
 
