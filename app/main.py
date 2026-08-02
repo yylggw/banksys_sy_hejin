@@ -1,11 +1,18 @@
-"""
-Streamlit 应用主入口 — 包含健康检查服务。
+"""Streamlit 应用主入口 — 包含健康检查服务。
 
 可直接运行:
   streamlit run app/main.py --server.port 8888
 
 健康检查: http://localhost:8889/health（独立 HTTP 服务）
 """
+
+import sys
+from pathlib import Path
+
+# 确保项目根目录在模块搜索路径中，否则 pages 里的 from app.utils... 会报 ModuleNotFoundError
+_project_root = Path(__file__).resolve().parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
 
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -54,7 +61,7 @@ st.set_page_config(
 
 
 def main() -> None:
-    """应用主入口，渲染侧边栏导航."""
+    """应用主入口，渲染侧边栏导航。"""
     st.sidebar.title("🏦 银行营销系统")
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 功能导航")
