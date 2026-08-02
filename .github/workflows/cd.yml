@@ -23,20 +23,21 @@ jobs:
           ruff check .
           pytest --cov-config=.coveragerc --cov=app/utils --cov-fail-under=80 -v
 
-      - name: Build Docker image
-        run: docker build -t banksys_sy_hejin:latest .
-
-      - name: Save image
-        run: docker save banksys_sy_hejin:latest | gzip > banksys_sy_hejin.tar.gz
-
-      - name: Copy image and deploy script to server
+      # 只复制源码到服务器（不含 Docker 镜像包，Docker 镜像直接在服务器构建）
+      - name: Copy source code to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "banksys_sy_hejin.tar.gz,deploy.sh"
+          source: |
+            Dockerfile
+            requirements.txt
+            run.py
+            deploy.sh
+            app/
           target: "/opt/banksys_sy_hejin/"
+          strip_components: 0
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.1.0
@@ -47,7 +48,5 @@ jobs:
           script: |
             set -e
             cd /opt/banksys_sy_hejin
-            docker load < banksys_sy_hejin.tar.gz
-            rm -f banksys_sy_hejin.tar.gz
             chmod +x deploy.sh
             bash deploy.sh
