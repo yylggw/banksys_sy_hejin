@@ -210,6 +210,13 @@ if __name__ == "__main__":
     metrics = train()
     print(f">> 训练完成: {json.dumps(metrics, indent=2, ensure_ascii=False)}")
 
-    test_results = test_model_on_test_set()
-    print(f">> 测试集评估: {json.dumps(test_results, indent=2, ensure_ascii=False)}")
+    # 尝试测试集评估（测试集可能不含标签列）
+    try:
+        test_results = test_model_on_test_set()
+        print(
+            f">> 测试集评估: {json.dumps(test_results, indent=2, ensure_ascii=False)}"
+        )
+    except ValueError as e:
+        print(f">> 测试集跳过（可能无标签列）: {e}")
+
     sys.exit(0)
