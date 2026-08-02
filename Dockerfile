@@ -15,13 +15,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir --timeout 300 -i "${PIP_INDEX_URL}" -r requirements.txt
 
-# 复制应用代码
+# 复制应用代码（run.py 已合并到 app/main.py 中）
 COPY app/ app/
-COPY run.py .
 
-EXPOSE 8888
+EXPOSE 8888 8889
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
   CMD curl -fsS http://localhost:8889/health || exit 1
 
-CMD ["python", "run.py"]
+# 直接 streamlit 运行（健康检查由 app/main.py 后台线程处理）
+CMD ["streamlit", "run", "app/main.py", "--server.port", "8888", "--server.address", "0.0.0.0", "--server.headless", "true"]

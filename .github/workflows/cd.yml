@@ -29,7 +29,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "Dockerfile,requirements.txt,run.py,deploy.sh,app/"
+          source: "Dockerfile,requirements.txt,deploy.sh,app/"
           target: "/opt/banksys_sy_hejin/"
           strip_components: 0
 

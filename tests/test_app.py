@@ -19,9 +19,9 @@ def health_server():
     port = sock.getsockname()[1]
     sock.close()
 
-    # 动态导入 run.py 中的 HealthHandler
-    run_mod = run_path("run.py")
-    handler_class = run_mod["HealthHandler"]
+    # 动态导入 app/main.py 中的 HealthHandler
+    mod = run_path("app/main.py")
+    handler_class = mod["HealthHandler"]
 
     server = HTTPServer(("127.0.0.1", port), handler_class)
     t = threading.Thread(target=server.serve_forever, daemon=True)

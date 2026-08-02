@@ -1,14 +1,50 @@
 """
-Streamlit 应用主入口。
+Streamlit 应用主入口 — 包含健康检查服务。
 
-提供多页面导航:
-- 1_数据分析.py: 交互式数据看板
-- 2_在线预测.py: 在线认购预测
+可直接运行:
+  streamlit run app/main.py --server.port 8888
+
+健康检查: http://localhost:8889/health（独立 HTTP 服务）
 """
+
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import streamlit as st
 
-# 必须在任何其他 streamlit 命令之前设置
+# ===== 健康检查服务（后台线程，端口 8889） =====
+
+
+class HealthHandler(BaseHTTPRequestHandler):
+    """健康检查端点, 返回 {"status": "ok"}"""
+
+    def do_GET(self) -> None:
+        if self.path == "/health":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"status": "ok"}')
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, *args) -> None:
+        pass  # 静默日志
+
+
+def _start_health_server() -> None:
+    """在 8889 端口启动健康检查服务（非阻塞）。"""
+    server = HTTPServer(("0.0.0.0", 8889), HealthHandler)
+    server.serve_forever()
+
+
+# 在 Streamlit 完全加载前启动健康检查线程
+_health_thread = threading.Thread(target=_start_health_server, daemon=True)
+_health_thread.start()
+
+
+# ===== Streamlit 入口 =====
+
 st.set_page_config(
     page_title="银行营销预测系统",
     page_icon="🏦",
