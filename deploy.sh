@@ -27,6 +27,10 @@ if [ -z "$PORT" ]; then
 fi
 echo ">> 部署到主机端口 $PORT"
 
+# 在服务器上构建 Docker 镜像（源码已通过 SCP 传输）
+echo ">> 构建 Docker 镜像..."
+docker build -t "$IMAGE" /opt/banksys_sy_hejin
+
 # 停删旧容器（幂等）
 docker rm -f "$APP" 2>/dev/null || true
 
@@ -38,7 +42,7 @@ docker run -d \
   "${IMAGE}"
 
 # 等待启动并健康检查
-sleep 5
+sleep 8
 curl -fsS "http://localhost:${PORT}/health"
 echo ""
 echo ">> 部署成功: http://<SSH_HOST>:${PORT}/"
